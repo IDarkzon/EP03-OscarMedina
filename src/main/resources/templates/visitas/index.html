@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EP04 - CRUD de Visitas</title>
+
+    <!-- Icono de la pagina web (Favicon) -->
+    <link rel="shortcut icon" th:href="@{/images/icon_web.png}" href="../../static/images/icon_web.png">
+
+    <!-- Enlazo el archivo de los estilos -->
+    <link th:href="@{/css/styles.css}" href="../../static/css/styles.css" rel="stylesheet" />
+
+    <!-- Enlazar con la libreria 6.1.1 de Font-Awesome subida en el repositorio CDNJS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Enlazar archivo javascript -->
+    <script th:src="@{/js/index.js}" src="../../static/js/index.js"></script>
+</head>
+<body>
+    <header id="masinfo_cab">
+        <div class="bordes">
+            <div class="container">
+                <h2>CRUD para Visitas</h2>
+            </div> <!-- container -->
+        </div> <!-- bordes -->
+        
+    </header> <!-- masinfo_cab / espaciado -->
+
+    <section id="CRUD" class="espaciado">
+        <div class="container">
+            <form id="filtro" th:action="@{/visitas}">
+                <div>
+                    <label for="id">Filtrar ID:</label>
+                    <input type="number" name="id" id="id" th:value="${id}" placeholder="Ingrese ID">
+                    <button type="submit" id="btn-filtrar"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+            <h2 th:if="${visitas.isEmpty()}">No hay Visitas</h2>
+            <table th:if="${!visitas.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th class="columna_1">ID</th>
+                        <th class="columna_2">Local</th>
+                        <th class="columna_3">DNI Afiliado</th>
+                        <th class="columna_4">Fecha</th>
+                        <th class="columna_5">Hora</th>
+                        <th class="columna_6">Acciones</th>
+                    </tr>  
+                </thead>
+                <tbody>
+                    <tr th:each="visita : ${visitas}" th:id="${visita.id}">
+                        <td class="columna_1" th:text="${visita.id}"></td>
+                        <td class="columna_2" th:text="${visita.local}"></td>
+                        <td class="columna_3" th:text="${visita.dni_afiliado}"></td>
+                        <td class="columna_4" th:text="${visita.fecha}"></td>
+                        <td class="columna_5" th:text="${visita.hora}"></td>
+                        <td class="columna_6">
+                            <button th:attr="onclick=|editarFila('${visita.id}')|"><i class="fa-solid fa-pencil"></i></button>
+                            <button><a th:href="@{visitas/delete/{id}(id=${visita.id})}" id="btn-eliminar"><i class="fa-solid fa-trash"></i></a></button>
+                            <button style="display: none;" th:attr="onclick=|guardarFila('${visita.id}')|"><i class="fa-solid fa-floppy-disk"></i></button>
+                            <button style="display: none;" th:attr="onclick=|cancelarEdicion('${visita.id}')|" id="btn-cancelar_2"><i class="fa-solid fa-ban"></i></button>
+                        </td>
+                    </tr> 
+                </tbody>
+                <tfoot id="formulario">
+                    <tr>
+                        <form th:action="@{/visitas}" method="post" th:object="${visita}" id="miFormulario">
+                            <td class="columna_1"><i class="fa-solid fa-calendar-days"></i></td>
+                            <td class="columna_2"><input disabled type="text" name="local" placeholder="Local" id="local" required></td>
+                            <td class="columna_3"><input disabled type="text" name="dni_afiliado" placeholder="DNI Afiliado" id="dni_afiliado" required></td>
+                            <td class="columna_4"><input disabled type="text" name="fecha" placeholder="Fecha" id="fecha" required></td>
+                            <td class="columna_5"><input disabled type="text" name="hora" placeholder="Hora" id="hora" required></td>
+                            <td class="columna_6">
+                                <button type="submit" id="btn-guardar"><i class="fa-solid fa-floppy-disk"></i></button>
+                                <button type="button" id="btn-cancelar"><i class="fa-solid fa-ban"></i></button>
+                                <button type="button" id="btn-agregar" class="center"><i class="fa-solid fa-plus"></i></button>
+                            </td>
+                        </form>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>     
+    </section>
+
+    <!-- Sección Pie -->
+    <footer id="pie">
+        <div class="container">
+            <p>&copy; EP04-Oscar Medina - Derechos reservados</p>
+        </div> <!-- contenedor -->
+    </footer> <!-- pie -->
+
+    <!-- Botón de Navegación rapida -->
+    <a href="#" id="scroll"><i class="fa-solid fa-angles-up fa-fw"></i></a>
+</body>
+</html>
